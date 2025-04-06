@@ -1,6 +1,5 @@
 const CRUDRoom = require("../service/Rooms");
 const excelService = require("../service/ExportExcel");
-
 const postCRUDRoom = async (req, res) => {
   const roomItemData = await CRUDRoom.createRoom(req.body);
   return res.status(200).json({
@@ -18,40 +17,44 @@ const postCRUDRoom = async (req, res) => {
     isStayed: roomItemData.isStayed,
     isCheckOut: roomItemData.isCheckOut,
     monthCheckIn: roomItemData.monthCheckIn,
-    monthCheckOut: roomItemData.monthCheckOut,
+    monthCheckOut: roomItemData.monthCheckOut
   });
 };
-
 const getCRUDRoom = async (req, res) => {
-  const { start, limit, sort, filter } = req.query;
-  const roomLists = await CRUDRoom.getAllRoom({ start, limit, sort, filter });
-
+  const {
+    start,
+    limit,
+    sort,
+    filter
+  } = req.query;
+  const roomLists = await CRUDRoom.getAllRoom({
+    start,
+    limit,
+    sort,
+    filter
+  });
   if (!roomLists) {
     return res.status(500).json({
       code: 1,
-      message: "roomList is not found",
+      message: "roomList is not found"
     });
   }
-
   return res.status(200).json({
     count: roomLists.count,
-    data: roomLists.data,
+    data: roomLists.data
   });
 };
-
 const deleteCRUDRoom = async (req, res) => {
   const roomId = req.body.id;
   const msg = await CRUDRoom.deleteRoom(roomId);
   if (!roomId) {
     return res.status(400).json({
       code: 1,
-      message: "Room not found",
+      message: "Room not found"
     });
   }
-
   return res.status(200).json(msg);
 };
-
 const updateCRUDRoom = async (req, res) => {
   const roomData = req.body;
   const updateRoomData = await CRUDRoom.updateRoom(roomData);
@@ -69,10 +72,9 @@ const updateCRUDRoom = async (req, res) => {
     isStayed: updateRoomData.isStayed,
     isCheckOut: updateRoomData.isCheckOut,
     monthCheckIn: updateRoomData.monthCheckIn,
-    monthCheckOut: updateRoomData.monthCheckOut,
+    monthCheckOut: updateRoomData.monthCheckOut
   });
 };
-
 const getDetailCRUDRoom = async (req, res) => {
   const roomDetailIds = req.params.id;
   if (roomDetailIds) {
@@ -82,25 +84,19 @@ const getDetailCRUDRoom = async (req, res) => {
     const roomDetail = await CRUDRoom.getDetailRoom(roomDetailIds);
     return res.status(400).json({
       code: roomDetail.code,
-      message: roomDetail.message,
+      message: roomDetail.message
     });
   }
 };
-
 const exportExcel = async (req, res) => {
   try {
-    const { fileName, filter } = req.query;
-
+    const {
+      fileName,
+      filter
+    } = req.query;
     const workbook = await excelService.generateExcelData(filter);
-
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=${fileName}.xlsx`
-    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", `attachment; filename=${fileName}.xlsx`);
     await workbook.xlsx.write(res);
     res.end();
   } catch (error) {
@@ -108,21 +104,15 @@ const exportExcel = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 const exportRoomOrdersExcel = async (req, res) => {
   try {
-    const { fileName, filter } = req.query;
-
+    const {
+      fileName,
+      filter
+    } = req.query;
     const workbook = await excelService.generateExcelRoomOrdersData(filter);
-
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=${fileName}.xlsx`
-    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", `attachment; filename=${fileName}.xlsx`);
     await workbook.xlsx.write(res);
     res.end();
   } catch (error) {
@@ -130,24 +120,19 @@ const exportRoomOrdersExcel = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 const exportRoomByDate = async (req, res) => {
   try {
-    const { fileName, checkIn, checkOut } = req.query;
-
+    const {
+      fileName,
+      checkIn,
+      checkOut
+    } = req.query;
     const workbook = await excelService.generateExcelRoomByDate({
       checkIn,
-      checkOut,
+      checkOut
     });
-
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=${fileName}.xlsx`
-    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", `attachment; filename=${fileName}.xlsx`);
     await workbook.xlsx.write(res);
     res.end();
   } catch (error) {
@@ -155,7 +140,6 @@ const exportRoomByDate = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 module.exports = {
   postCRUDRoom: postCRUDRoom,
   getCRUDRoom: getCRUDRoom,
@@ -164,5 +148,5 @@ module.exports = {
   getDetailCRUDRoom: getDetailCRUDRoom,
   exportExcel: exportExcel,
   exportRoomOrdersExcel: exportRoomOrdersExcel,
-  exportRoomByDate: exportRoomByDate,
+  exportRoomByDate: exportRoomByDate
 };

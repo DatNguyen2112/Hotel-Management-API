@@ -23,7 +23,7 @@
     "libphonenumber-js": "^1.10.51",
     "mysql2": "^2.2.5",
     "nodemailer": "^6.9.12",
-    "sequelize": "^6.6.2",
+    "sequelize": "^6.37.7",
     "twilio": "^4.19.0",
     "vnpay": "^0.5.2"
   },

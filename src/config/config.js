@@ -1,15 +1,13 @@
-{
+require('dotenv').config(); // this is important!
+module.exports = {
   "development": {
-    "username": "root",
-    "password": "ngoc21062001",
-    "database": "test_db",
-    "host": "127.0.0.1",
-    "port": "3306",
-    "dialect": "mysql",
-    "logging": false,
-    "query" : {
-      "raw" : true
-    }
+    "username": 'root',
+    "password": 'ngoc21062001',
+    "database": 'test_db',
+    "host": 'localhost',
+    "port": 3307,
+    "dialect": 'mysql',
+    "timezone": "+07:00"
   },
   "test": {
     "username": "root",
@@ -25,4 +23,4 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
-}
+};
